@@ -14,7 +14,21 @@
 
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<style type="text/css">
+#divLangSelect {position:absolute; 
+				width:205px;
+				height:205px;
+				top:5px;
+				right:5px;  
+				display:none; 
+				opacity:0.97;
+				} 
+</style>
+
 <script type="text/javascript">
+var clickFlag = false;
+var slideFlag = false;
+
 function fncGetList(currentPage) {
 	document.getElementById('currentPage').value=currentPage;
 	document.detailForm.submit();
@@ -34,10 +48,11 @@ function fncSortingByUser(pageSize){
 $(function(){
 	$("td:contains('할인상품보기')").on('click',function(){
 		var href = "/product/getProduct?boardNo=${discount.discountBoard}";
-		if(${param.menu=="search"}){
+		var menu = "${param.menu}";
+		if(menu=="search"){
 			href = href + "&menu=search";
 		}
-		else if(${param.menu=="manage"}){
+		else if(menu=="manage"){
 			href = href + "&menu=manage";
 		}
 		self.location = href;
@@ -45,22 +60,10 @@ $(function(){
 });
 
 
-/* $(function(){
-	$('.boardTitle').on('click',function(){
-		var no = $(this).parent().children('.boardNo').text();
-		var href = "/product/getProduct?boardNo="+no;
-		if(${param.menu=='search'}){
-			href = href + "&menu=search";
-		}
-		else if(${param.menu=='manage'}){
-			href = href + "&menu=manage";
-		}
-		self.location = href;
-	});
-});
- */
 $(function(){
-	$('.boardTitle').on('click',function(){
+	
+	$('.boardTitle').on(click : function(){
+		clickFlag = true;
 		var no = $(this).parent().children('.boardNo').text();
 		var href = "/product/json/getProduct"+"/"+no;
 		var menu = "${param.menu}";
@@ -94,7 +97,10 @@ $(function(){
 				$('#'+no+'').html(dispalyValue);
 			}
 		});
+	},dblclick : function(){
+		$('#tempDisplayValue').remove();
 	});	
+	
 });
 
 $(function(){
@@ -124,6 +130,63 @@ $(function() {
 });
 
 
+$(function(){
+	
+	$('.boardTitle').on('mouseover',function(e){
+		var divTop = $(this).position().top+20;
+		var divLeft = $(this).position().left+80;
+		var no = $(this).parent().children('.boardNo').text();
+		var href = "/product/json/getProduct"+"/"+no;
+		var menu = "${param.menu}";
+		if(menu=='search'){
+			href = href + "/search";
+		}
+		else if(menu=='manage'){
+			href = href + "/manage";
+		}
+			
+			$.ajax({
+				url:href,
+				method:"GET",
+				data:"json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success:function(JsonData,status){
+					  	var displayValue = "<div id='displayValue'>"+
+					 						" <img src='/images/uploadFiles/"+JsonData.product.fileName+"' style='width:200px;height:200px;'/>"+
+					 						"</div>";
+					 $('#displayValue').remove();
+					  $('#divLangSelect').html(displayValue); 
+				}
+			});
+			
+		if(!clickFlag){
+			setTimeout(function(){
+				
+				/* var divTop = e.pageY;
+				var divLeft = e.pageX; */
+				$('#divLangSelect').css({
+					"top":divTop,
+					"left":divLeft,
+					"position":"absolute"
+				}).show();
+			},1200);
+		}
+	});
+	
+	$('.boardTitle').on('mousemove',function(){
+		$('#divLangSelect').css('display','none');	
+	});
+	
+});
+	
+$(function(){
+		setInterval(function(){
+			$('#divLangSelect').css('display','none');	
+		},3500);
+});
 
 
 
@@ -136,6 +199,15 @@ $(function() {
 <div style="width:98%; margin-left:10px;">
 
 <form name="detailForm" class="listForm">
+
+<!-- 레이어드 div -->
+
+<div id="divLangSelect"  >
+ 	 <div id='displayValue'>내용 없음</div>
+</div>
+
+
+
 
 <input type="hidden" id="HddnDiscountBoardNo" name="HddnDiscountBoardNo" value="${discount.discountBoard}"/>
 
@@ -167,8 +239,8 @@ $(function() {
 
 
 <input type='hidden' id="orderType" name='orderType' value="${search.orderType}"/>
-<div style="float:right; width:750px;">
-<table border="0" cellspacing="0" cellpadding="0" style=" margin-top:10px;">
+<div style="float:right; width:800px;">
+<table border="0" cellspacing="0" cellpadding="0" style=" margin-top:10px; width:790px;">
 	<tr>
 		<td>
 				할인상품보기&nbsp;&nbsp;
@@ -233,6 +305,7 @@ $(function() {
 </table>
 </div>
 
+<div id="ListTblDiv">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td colspan="11" >전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>		
@@ -280,6 +353,7 @@ $(function() {
 	
 	
 </table>
+</div>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>

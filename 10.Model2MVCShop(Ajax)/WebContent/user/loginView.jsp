@@ -48,7 +48,7 @@
 							dataType : "json" ,
 							headers : {
 								"Accept" : "application/json",
-								"Content-Type" : "application/json"
+								"Content-Type" : "application/json;charset=UTF-8"
 							},
 							data : JSON.stringify({
 								userId : id,

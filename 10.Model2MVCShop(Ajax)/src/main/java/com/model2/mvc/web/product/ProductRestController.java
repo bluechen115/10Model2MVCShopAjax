@@ -112,8 +112,11 @@ public class ProductRestController {
 		if(purchaseCount % 4 == 0) {
 			price=(int)(price*0.9);
 		}
-		
 		product.setResultPrice(price);
+		
+		if(product.getFileName() == null) {
+			product.setFileName("no_detail_img.gif");
+		}
 		
 		Map<String, Object> resultMap = new HashMap<String,Object>();
 		

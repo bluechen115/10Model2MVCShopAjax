@@ -1,7 +1,9 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
 import java.net.URLDecoder;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
@@ -55,11 +58,56 @@ public class ProductController {
 	//@Value("#{commonProperties['pageSize'] ?: 2}")
 	int pageSize;
 	
-	@RequestMapping("addProduct")
+	/*@RequestMapping("addProduct")
 	public ModelAndView addProduct(@ModelAttribute("productBoard") ProductBoard productBoard,
 									@ModelAttribute("product")Product product) throws Exception{
 		System.out.println("/addProduct");
 
+		productBoardService.addProductBoard(productBoard);
+		
+		String manuDate = product.getManuDate().replaceAll("-", "");
+		product.setManuDate(manuDate);
+		
+		for(int i=0;i<productBoard.getQuantity();i++) {
+			productService.addProduct(product);			
+		}
+		
+		
+		ModelAndView modelAndView=new ModelAndView();		
+		modelAndView.addObject("product", product);
+		modelAndView.addObject("productBoard", productBoard);
+		
+		modelAndView.setViewName("forward:/product/successAddProduct.jsp");
+		
+		return modelAndView;
+	}*/
+	
+	@RequestMapping("addProduct")
+	public ModelAndView addProduct(HttpServletRequest request,
+									HttpServletResponse response,
+									@ModelAttribute("productBoard") ProductBoard productBoard,
+									@ModelAttribute("product") Product product) throws Exception{
+		System.out.println("/addProduct");
+
+		/*String path = "//Users//munmyeonghwan//git//07Model2MVCShop//07.Model2MVCShop(URI,pattern)//WebContent//images//uploadFiles//";*/
+		String path = "C:\\Users\\USER\\git\\10Model2MVCShopAjax\\10.Model2MVCShop(Ajax)\\WebContent\\images\\uploadFiles\\";
+		
+		
+		MultipartFile uploadfile = product.getUploadFile();
+		
+		UUID uuid = UUID.randomUUID();
+		String fileName = uuid+"_"+uploadfile.getOriginalFilename();
+		
+		
+		if(fileName.equals("")) {
+			product.setFileName(null);
+		}else {
+			product.setFileName(fileName);
+			
+			uploadfile.transferTo(new File(path+fileName));
+		}
+
+		
 		productBoardService.addProductBoard(productBoard);
 		
 		String manuDate = product.getManuDate().replaceAll("-", "");
@@ -108,8 +156,11 @@ public class ProductController {
 		if(purchaseCount % 4 == 0) {
 			price=(int)(price*0.9);
 		}
-		
 		product.setResultPrice(price);
+		
+		if(product.getFileName() == null) {
+			product.setFileName("no_detail_img.gif");
+		}
 		
 		//////////////Cookie//////////////////
 		Cookie[] cookies = request.getCookies();
