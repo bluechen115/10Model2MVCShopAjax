@@ -9,6 +9,30 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<style type="text/css">
+ #purchaseHistoryDiv{ width:300px;
+ 						height:300px;
+ 						position: absolute;
+ 						left:50%;
+ 						right:50%;
+ 						margin:0 auto;
+ 						margin-left: -250px;
+ 						margin-top: -350px;
+ 						background-color: red;
+ 						display: none;
+ 						
+ }
+ #purchaseHistoryDiv p{ font-size: 25px;
+ 						font-weight: bold;
+ 						text-align: center;
+ 						margin-top: 5px;
+ }
+</style>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script  src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
 <script type="text/javascript">
 	function fncGetPurchaseList(currentPage) {
 		var str = "/purchase/listPurchase?";
@@ -54,7 +78,6 @@
 					<td colspan="11">전체 ${resultPage.totalCount} 건수, 현재
 						${resultPage.currentPage} 페이지</td>
 				</tr>
-				<tr></tr>
 				<tr>
 					<td class="ct_list_b" width="100">No</td>
 					<td class="ct_line02"></td>
@@ -88,8 +111,9 @@
 						<td></td>
 						<td align="left">${purchase.purchaseProd.prodName}</td>
 						<td></td>
-						<td align="left">
-							<a href="/user/getUser?userId=${user.userId}">${purchase.buyer.userId}</a>
+						<td align="left"  class='userIdClass' >
+							<%-- <a href="/user/getUser?userId=${user.userId}">${purchase.buyer.userId}</a> --%>
+							<p style="text-align: center; margin-top: 12px; cursor: pointer;">${purchase.buyer.userId}</p>
 						</td>
 						<td></td>
 			
@@ -128,12 +152,13 @@
 						</td>
 					</tr>
 					
-					<c:set var="i" value="${i+1}" />
-				</c:forEach>
-
 				<tr>
 					<td colspan="15" bgcolor="D6D7D6" height="1"></td>
 				</tr>
+					
+					<c:set var="i" value="${i+1}" />
+				</c:forEach>
+
 
 			</table>
 
@@ -148,8 +173,53 @@
 
 			<!--  페이지 Navigator 끝 -->
 		</form>
+		
+	<!-- 구매이력 -->
+	<div id='purchaseHistoryDiv'>
+		<p>유저 정보</p>
+		<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    구매완료건
+    <span class="badge badge-primary badge-pill">14</span>
+  </li>
+  <li id='userPurchaseLi' style="display: none;">
+  	<span style="height: 20px; background-color: blue;">ddddd</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    구매취소건
+    <span class="badge badge-primary badge-pill">2</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    미정
+    <span class="badge badge-primary badge-pill">1</span>
+  </li>
+</ul>
+	</div>
 
 	</div>
 
+
 </body>
+
+<script type="text/javascript">
+	
+	$('.userIdClass').on('click',function(){
+		var userId = $(this).text().trim();
+		$('#purchaseHistoryDiv').css('display','block');
+		$.ajax({
+			url:"/purchase/json/getPurchaseUserHistory/"+userId,
+			method:"GET",
+			data:"json",
+			success:function(JsonData,status){
+				alert('success');
+				$(#userPurchaseLi).css('display','block');
+			},
+			error:function(){
+				alert('error');
+			}
+			
+		});
+	});
+
+</script>
 </html>
