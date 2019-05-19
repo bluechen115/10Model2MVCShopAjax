@@ -23,4 +23,6 @@ public interface PurchaseService {
 	
 	public int getCountPurchase(String buyerId) throws Exception;
 	
+	public int getCountCancelPurchase(String buyerId) throws Exception;
+	
 }

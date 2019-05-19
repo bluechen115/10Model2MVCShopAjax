@@ -85,7 +85,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	@Override
 	public int getCountPurchase(String buyerId) throws Exception {
-		return purchaseDao.getCountPurchase(buyerId);
+		return purchaseDao.getCountPurchaseByUserId(buyerId);
+	}
+
+	@Override
+	public int getCountCancelPurchase(String buyerId) throws Exception {
+		return purchaseDao.getCountCancelPurchase(buyerId);
 	}
 
 }

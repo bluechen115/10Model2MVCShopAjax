@@ -61,8 +61,13 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public int getCountPurchase(String buyerId) throws Exception {
-		return sqlSession.selectOne("PurchaseMapper.getCountPurchase", buyerId);
+	public int getCountPurchaseByUserId(String buyerId) throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.getCountPurchaseByUserId", buyerId);
+	}
+
+	@Override
+	public int getCountCancelPurchase(String buyerId) throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.getCountCancelPurchase", buyerId);
 	}
 
 }

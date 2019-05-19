@@ -124,7 +124,7 @@
 		SELECT * FROM CODE WHERE group_id=#{value}
 	</select>
 	
-	<select id="getCountPurchase" parameterType="string" resultType="int">
+	<select id="getCountPurchaseByUserId" parameterType="string" resultType="int">
 		SELECT
 		COUNT(*)
 		FROM TRANSACTION
@@ -132,5 +132,15 @@
 		buyer_id = #{value}
 		AND
 		tran_status_code IN (2,4)
+	</select>
+	
+	<select id="getCountCancelPurchase" parameterType="string" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM TRANSACTION
+		WHERE
+		buyer_id = #{value}
+		AND
+		tran_status_code IN (5)
 	</select>
 </mapper>

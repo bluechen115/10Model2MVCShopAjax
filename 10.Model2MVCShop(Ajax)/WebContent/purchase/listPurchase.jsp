@@ -18,7 +18,7 @@
  						margin:0 auto;
  						margin-left: -250px;
  						margin-top: -350px;
- 						background-color: red;
+ 						background-color: white;
  						display: none;
  						
  }
@@ -112,7 +112,6 @@
 						<td align="left">${purchase.purchaseProd.prodName}</td>
 						<td></td>
 						<td align="left"  class='userIdClass' >
-							<%-- <a href="/user/getUser?userId=${user.userId}">${purchase.buyer.userId}</a> --%>
 							<p style="text-align: center; margin-top: 12px; cursor: pointer;">${purchase.buyer.userId}</p>
 						</td>
 						<td></td>
@@ -176,24 +175,7 @@
 		
 	<!-- 구매이력 -->
 	<div id='purchaseHistoryDiv'>
-		<p>유저 정보</p>
-		<ul class="list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    구매완료건
-    <span class="badge badge-primary badge-pill">14</span>
-  </li>
-  <li id='userPurchaseLi' style="display: none;">
-  	<span style="height: 20px; background-color: blue;">ddddd</span>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    구매취소건
-    <span class="badge badge-primary badge-pill">2</span>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    미정
-    <span class="badge badge-primary badge-pill">1</span>
-  </li>
-</ul>
+		
 	</div>
 
 	</div>
@@ -209,10 +191,9 @@
 		$.ajax({
 			url:"/purchase/json/getPurchaseUserHistory/"+userId,
 			method:"GET",
-			data:"json",
-			success:function(JsonData,status){
-				alert('success');
-				$(#userPurchaseLi).css('display','block');
+			data:"text",
+			success:function(data,status){
+				 $('#purchaseHistoryDiv').html(data);
 			},
 			error:function(){
 				alert('error');
