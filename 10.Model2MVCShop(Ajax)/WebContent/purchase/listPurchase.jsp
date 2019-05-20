@@ -18,8 +18,10 @@
  						margin:0 auto;
  						margin-left: -250px;
  						margin-top: -350px;
- 						background-color: white;
+ 						background-color: #EAEAEA;
  						display: none;
+ 						border:1px solid #BDBDBD;
+ 						padding: 2px;
  						
  }
  #purchaseHistoryDiv p{ font-size: 25px;
@@ -200,6 +202,10 @@
 			}
 			
 		});
+	});
+	
+	$('#closeBtn').on('click',function(){
+		$('#purchaseHistoryDiv').css('display','none');
 	});
 
 </script>

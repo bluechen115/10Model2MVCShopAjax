@@ -350,7 +350,7 @@ function fncSortingByUser(pageSize){
 				});
 				
 			if(!clickFlag){
-				setTimeout(function(){
+				timer = setTimeout(function(){
 					
 					$('#divLangSelect').css({
 						"top":divTop,
@@ -361,6 +361,7 @@ function fncSortingByUser(pageSize){
 			}
 		}).on('mouseleave',function(){
 			$('#divLangSelect').css('display','none');	
+			clearTimeout(timer);
 		});
 		
 		
