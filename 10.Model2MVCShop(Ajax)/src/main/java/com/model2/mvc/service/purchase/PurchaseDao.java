@@ -14,6 +14,10 @@ public interface PurchaseDao {
 	public List<Purchase> getPurchaseList(Map<String,Object> map)
 			throws Exception;
 	
+	public List<Purchase> getPurchaseListByUserId(String userId) throws Exception;
+	
+	public List<Purchase> getCancelListByUserId(String userId) throws Exception;
+	
 	public void insertPurchase(Purchase purchase) throws Exception;
 	
 	public void updatePurchase(Purchase purchase) throws Exception;

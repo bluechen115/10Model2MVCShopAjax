@@ -367,11 +367,17 @@ function fncSortingByUser(pageSize){
 		
 
 	
-$(function(){
-		setInterval(function(){
-			$('#divLangSelect').css('display','none');	
-		},3500);
-});
+	$(function(){
+			setInterval(function(){
+				$('#divLangSelect').css('display','none');	
+			},3500);
+	});
+
+	$('#searchKeyword').on('change',function(){
+		$.ajax({
+			url:
+		});
+	});
 
 
 </script>

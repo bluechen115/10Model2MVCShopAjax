@@ -69,6 +69,16 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
+	public List<Purchase> getPurchaseListByUserId(String userId) throws Exception {
+		return purchaseDao.getPurchaseListByUserId(userId);
+	}
+
+	@Override
+	public List<Purchase> getCancelListByUserId(String userId) throws Exception {
+		return purchaseDao.getCancelListByUserId(userId);
+	}
+	
+	@Override
 	public void updatePurcahse(Purchase purchase) throws Exception {
 		purchaseDao.updatePurchase(purchase);
 	}
@@ -92,5 +102,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 	public int getCountCancelPurchase(String buyerId) throws Exception {
 		return purchaseDao.getCountCancelPurchase(buyerId);
 	}
+
+
 
 }

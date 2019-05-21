@@ -1,5 +1,7 @@
 package com.model2.mvc.web.purchase;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseService;
 
 @Controller
@@ -30,14 +33,21 @@ public class PurchaseRestController {
 	public String getPurchaseUserHistory(@PathVariable("userId") String userId,
 										HttpServletRequest request) throws Exception{
 		
-		Search search = new Search();
+		Map<String, Object> map = new HashMap<String,Object>();
 		
-		Map<String, Object> map = purchaseService.getPurchaseList(search, userId);
+		List<Purchase> purchaseList = purchaseService.getPurchaseListByUserId(userId);
 		
+		int totalCount = purchaseService.getCountPurchase(userId);
 		int cancelCount = purchaseService.getCountCancelPurchase(userId);
 		
+		map.put("purchaseList", purchaseList);
+		map.put("totalCount", totalCount);
 		map.put("cancelCount", cancelCount);
+		map.put("cancelList", purchaseService.getCancelListByUserId(userId));
 		map.put("userId", userId);
+		
+	
+		System.out.println("RestController map :: "+purchaseList.get(0).getTranNo());
 		
 		request.setAttribute("map", map);
 		

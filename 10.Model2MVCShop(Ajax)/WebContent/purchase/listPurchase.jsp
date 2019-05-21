@@ -10,25 +10,16 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <style type="text/css">
- #purchaseHistoryDiv{ width:300px;
- 						height:300px;
+ #purchaseHistoryDiv{ 
  						position: absolute;
  						left:50%;
  						right:50%;
  						margin:0 auto;
  						margin-left: -250px;
  						margin-top: -350px;
- 						background-color: #EAEAEA;
- 						display: none;
- 						border:1px solid #BDBDBD;
  						padding: 2px;
- 						
  }
- #purchaseHistoryDiv p{ font-size: 25px;
- 						font-weight: bold;
- 						text-align: center;
- 						margin-top: 5px;
- }
+
 </style>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -176,7 +167,7 @@
 		</form>
 		
 	<!-- 구매이력 -->
-	<div id='purchaseHistoryDiv'>
+	<div class="purchaseHistoryDiv" id='purchaseHistoryDiv'>
 		
 	</div>
 
@@ -204,9 +195,8 @@
 		});
 	});
 	
-	$('#closeBtn').on('click',function(){
-		$('#purchaseHistoryDiv').css('display','none');
-	});
+
+	
 
 </script>
 </html>

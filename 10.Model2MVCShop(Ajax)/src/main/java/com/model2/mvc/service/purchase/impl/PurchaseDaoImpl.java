@@ -33,6 +33,16 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
+	public List<Purchase> getPurchaseListByUserId(String userId) throws Exception {
+		return sqlSession.selectList("PurchaseMapper.getPurchaseListByUserId", userId);
+	}
+
+	@Override
+	public List<Purchase> getCancelListByUserId(String userId) throws Exception {
+		return sqlSession.selectList("PurchaseMapper.getCancelListByUserId",userId);
+	}
+	
+	@Override
 	public void insertPurchase(Purchase purchase) throws Exception {
 		sqlSession.insert("PurchaseMapper.insertPurchase", purchase);
 		
@@ -69,5 +79,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public int getCountCancelPurchase(String buyerId) throws Exception {
 		return sqlSession.selectOne("PurchaseMapper.getCountCancelPurchase", buyerId);
 	}
+
+
 
 }

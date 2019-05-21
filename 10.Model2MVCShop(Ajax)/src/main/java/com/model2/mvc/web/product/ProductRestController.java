@@ -1,6 +1,7 @@
 package com.model2.mvc.web.product;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -136,6 +137,15 @@ public class ProductRestController {
 		System.out.println("json/listProduct");
 		
 				
+		return null;
+	}
+	
+	@RequestMapping(value="json/getProductBoardTitle/{searchKeyword}")
+	public List<String> getProductBoardTitle(@PathVariable("searchKeyword") String searchKeyword) throws Exception{
+		System.out.println("json/getProductBoardTitle");
+		
+		
+		
 		return null;
 	}
 		

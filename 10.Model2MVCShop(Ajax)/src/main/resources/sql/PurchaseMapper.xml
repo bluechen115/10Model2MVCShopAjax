@@ -68,6 +68,26 @@
 		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
 	</select>
 	
+	<select id="getPurchaseListByUserId" parameterType="string" resultMap="purchaseSelectMap">
+		SELECT
+		*
+		FROM
+		TRANSACTION
+		WHERE
+		BUYER_ID = #{value}
+	</select>
+	
+	<select id="getCancelListByUserId" parameterType="string" resultMap="purchaseSelectMap">
+		SELECT
+		*
+		FROM
+		TRANSACTION
+		WHERE
+		BUYER_ID = #{value}
+		AND
+		tran_status_code IN (5)
+	</select>
+	
 	<insert id="insertPurchase" parameterType="purchase">
 		INSERT INTO TRANSACTION (tran_no,PROD_NO,BUYER_ID,PAYMENT_OPTION,
 				RECEIVER_NAME,RECEIVER_PHONE,DLVY_ADDR,
