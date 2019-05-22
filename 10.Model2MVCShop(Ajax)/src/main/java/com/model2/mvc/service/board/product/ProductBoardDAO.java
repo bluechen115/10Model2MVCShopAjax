@@ -28,4 +28,6 @@ public interface ProductBoardDAO {
 	
 	public int selectRandomProdBoardNo() throws Exception;
 	
+	public List<ProductBoard> selectTitleByKeyword(String searchKeyword) throws Exception;
+	
 }

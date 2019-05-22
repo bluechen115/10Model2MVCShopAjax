@@ -21,5 +21,7 @@ public interface ProductBoardService {
 	
 	public void addViewCount(int boardNo) throws Exception;
 	
+	public List<ProductBoard> getTitleByKeyword(String searchKeyword) throws Exception;
+	
 }
 

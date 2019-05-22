@@ -75,5 +75,10 @@ public class ProductBoardDAOImpl implements ProductBoardDAO {
 		
 	}
 
+	@Override
+	public List<ProductBoard> selectTitleByKeyword(String searchKeyword) throws Exception {
+		return sqlSession.selectList("ProductBoardMapper.getTitleByKeyword", searchKeyword);
+	}
+
 
 }

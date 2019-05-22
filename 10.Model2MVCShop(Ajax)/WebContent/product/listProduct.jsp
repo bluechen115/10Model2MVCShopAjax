@@ -7,28 +7,242 @@
 
 
 <html>
+
 <head>
 <title class="pageTitle">상품 목록조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/admin.css" type="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<style type="text/css">
-#divLangSelect {position:absolute; 
-				width:205px;
-				height:205px;
-				top:5px;
-				right:5px;  
-				display:none; 
-				opacity:0.97;
-				} 
-</style>
 
-<script type="text/javascript">
+	<style type="text/css">
+	#divLangSelect {position:absolute; 
+					width:205px;
+					height:205px;
+					top:5px;
+					right:5px;  
+					display:none; 
+					opacity:0.97;
+					} 
+	</style>
+
+
+  <script type="text/javascript">
+
+	var clickFlag = false;
+	var slideFlag = false;
+	var availableTags = [];
+
+	
+	function fncGetList(currentPage) {
+		document.getElementById('currentPage').value=currentPage;
+		document.detailForm.submit();
+	}
+	function fncFindProductList(){
+		document.detailForm.submit();
+	}
+	function fncSortingList(orderType){
+		document.getElementById('orderType').value=orderType;
+		document.detailForm.submit();
+	}
+	function fncSortingByUser(pageSize){
+		document.getElementById('pageSize').value=pageSize;
+		document.detailForm.submit();
+	}
+
+	$(function(){
+		$("td:contains('할인상품보기')").on('click',function(){
+			var href = "/product/getProduct?boardNo=${discount.discountBoard}";
+			var menu = "${param.menu}";
+			if(menu=="search"){
+				href = href + "&menu=search";
+			}
+			else if(menu=="manage"){
+				href = href + "&menu=manage";
+			}
+			self.location = href;
+		});
+	
+	
+		$('.boardTitle').on('click', function(e){
+			e.stopImmediatePropagation();
+			clickFlag = true;
+			var no = $(this).parent().children('.boardNo').text();
+			var href = "/product/json/getProduct"+"/"+no;
+			var menu = "${param.menu}";
+			if(menu=='search'){
+				href = href + "/search";
+			}
+			else if(menu=='manage'){
+				href = href + "/manage";
+			}
+			
+			$.ajax({
+				url:href,
+				method:"GET",
+				dataType:"json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success:function(JsonData,status){
+					 var dispalyValue = 
+						 				"<div id='displayDiv'>"+
+						 				"<h3 id='tempDisplayValue'>"+
+											"글제목 : "+JsonData.productBoard.title+"<br/>"+
+											"상품명 : "+JsonData.product.prodName+"<br/>"+
+											"상세정보 : "+JsonData.productBoard.boardDetail+"<br/>"+
+											"조회수 : "+JsonData.productBoard.viewCount+"<br/>"+
+											"남은 수량 : "+JsonData.productBoard.quantity+"<br/>"+
+											"제조일자 : "+JsonData.product.manuDate+"<br/>"+
+											"가격 : "+JsonData.product.resultPrice+
+										"</h3> "+"<div id='closeBtnDiv' style='float:right; margin-top:1px;'><button type='button' id='closeBtn'>X</button></div></div>";
+										
+					$('#displayDiv').remove();
+					$('#'+no+'').html(dispalyValue);
+					
+					$('#closeBtn').on('click',function(){
+						$('#'+no+'').empty();
+						clickFlag = false;
+					});
+				}
+			});
+		});	
+		
+	
+		
+	
+	
+	
+		$('td:contains("최근등록순")').on('click',function(){
+			fncSortingList('1');
+		});
+		
+		$('td:contains("가격높은순")').on('click',function(){
+			fncSortingList('2');
+		});
+		
+		$('td:contains("가격낮은순")').on('click',function(){
+			fncSortingList('3');
+		});
+	
+	
+	
+		$('.ct_btn01:contains("검색")').on('click',function(){
+			$('form').attr("method","post").attr("action","/product/listProduct").submit();
+		});
+	
+	
+	
+		$('.pageSelector').on('change',function(){
+			$('.ct_btn01:contains("검색")').trigger('click');
+		});
+	
+		
+		 $('.boardTitle').on('mouseover',function(e){
+				var divTop = $(this).position().top+20;
+				var divLeft = $(this).position().left+80;
+				var no = $(this).parent().children('.boardNo').text();
+				var href = "/product/json/getProduct"+"/"+no;
+				var menu = "${param.menu}";
+				if(menu=='search'){
+					href = href + "/search";
+				}
+				else if(menu=='manage'){
+					href = href + "/manage";
+				}
+					
+					$.ajax({
+						url:href,
+						method:"GET",
+						data:"json",
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						success:function(JsonData,status){
+							  	var displayValue = "<div id='displayValue'>"+
+							 						" <img src='/images/uploadFiles/"+JsonData.product.fileName+"' style='width:200px;height:200px;'/>"+
+							 						"</div>";
+							 $('#displayValue').remove();
+							  $('#divLangSelect').html(displayValue); 
+						}
+					});
+					
+				if(!clickFlag){
+					timer = setTimeout(function(){
+						
+						$('#divLangSelect').css({
+							"top":divTop,
+							"left":divLeft,
+							"position":"absolute"
+						}).show();
+					},1200);
+				}
+			}).on('mouseleave',function(){
+				$('#divLangSelect').css('display','none');	
+				clearTimeout(timer);
+			});
+	})
+		
+
+	
+	$(function(){
+			setInterval(function(){
+				$('#divLangSelect').css('display','none');	
+			},3500);
+	
+	
+			$('#searchKeyword').on('keyup',function(){
+				var conditionFlag = $('#searchCondition').val();
+				var searchKeyword = $(this).val();
+				var param = {"searchKeyword":searchKeyword};
+				var values=[];
+				
+				
+				if(conditionFlag == '1'){
+					
+					$.ajax({
+						url:"/product/json/getProductBoardTitle/",
+						method:"POST",
+						
+						contentType: "application/json",
+						data:param,
+						dataType:"json",
+						success:function(data){
+							availableTags = data;
+													
+						},
+						error:function(){
+							alert("에러");
+						}
+					});	
+					
+					$('#searchKeyword').autocomplete({
+					      source: availableTags
+					});
+					
+				}
+				
+			});
+			
+			
+	});
+
+	
+	
 
 
 </script>
+
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
@@ -117,9 +331,9 @@
 					<option value="2" >글내용</option>
 				</c:if>
 			</select>
+			
 			<input type="text" id="searchKeyword" name="searchKeyword"  class="ct_input_g" style="width:200px; height:19px" 
-				value="${!empty search.searchKeyword ? search.searchKeyword:''}"
-			/>
+				value="${!empty search.searchKeyword ? search.searchKeyword:''}"/>
 		</td>
 	
 		
@@ -209,177 +423,6 @@
 </div>
 </body>
 
-<script type="text/javascript">
 
-var clickFlag = false;
-var slideFlag = false;
-
-function fncGetList(currentPage) {
-	document.getElementById('currentPage').value=currentPage;
-	document.detailForm.submit();
-}
-function fncFindProductList(){
-	document.detailForm.submit();
-}
-function fncSortingList(orderType){
-	document.getElementById('orderType').value=orderType;
-	document.detailForm.submit();
-}
-function fncSortingByUser(pageSize){
-	document.getElementById('pageSize').value=pageSize;
-	document.detailForm.submit();
-}
-
-
-	$("td:contains('할인상품보기')").on('click',function(){
-		var href = "/product/getProduct?boardNo=${discount.discountBoard}";
-		var menu = "${param.menu}";
-		if(menu=="search"){
-			href = href + "&menu=search";
-		}
-		else if(menu=="manage"){
-			href = href + "&menu=manage";
-		}
-		self.location = href;
-	});
-
-
-	$('.boardTitle').on('click', function(e){
-		e.stopImmediatePropagation();
-		clickFlag = true;
-		var no = $(this).parent().children('.boardNo').text();
-		var href = "/product/json/getProduct"+"/"+no;
-		var menu = "${param.menu}";
-		if(menu=='search'){
-			href = href + "/search";
-		}
-		else if(menu=='manage'){
-			href = href + "/manage";
-		}
-		
-		$.ajax({
-			url:href,
-			method:"GET",
-			dataType:"json",
-			headers : {
-				"Accept" : "application/json",
-				"Content-Type" : "application/json"
-			},
-			success:function(JsonData,status){
-				 var dispalyValue = 
-					 				"<div id='displayDiv'>"+
-					 				"<h3 id='tempDisplayValue'>"+
-										"글제목 : "+JsonData.productBoard.title+"<br/>"+
-										"상품명 : "+JsonData.product.prodName+"<br/>"+
-										"상세정보 : "+JsonData.productBoard.boardDetail+"<br/>"+
-										"조회수 : "+JsonData.productBoard.viewCount+"<br/>"+
-										"남은 수량 : "+JsonData.productBoard.quantity+"<br/>"+
-										"제조일자 : "+JsonData.product.manuDate+"<br/>"+
-										"가격 : "+JsonData.product.resultPrice+
-									"</h3> "+"<div id='closeBtnDiv' style='float:right; margin-top:1px;'><button type='button' id='closeBtn'>X</button></div></div>";
-									
-				$('#displayDiv').remove();
-				$('#'+no+'').html(dispalyValue);
-				
-				$('#closeBtn').on('click',function(){
-					$('#'+no+'').empty();
-					clickFlag = false;
-				});
-			}
-		});
-	});	
-	
-
-	
-
-
-
-	$('td:contains("최근등록순")').on('click',function(){
-		fncSortingList('1');
-	});
-	
-	$('td:contains("가격높은순")').on('click',function(){
-		fncSortingList('2');
-	});
-	
-	$('td:contains("가격낮은순")').on('click',function(){
-		fncSortingList('3');
-	});
-
-
-
-	$('.ct_btn01:contains("검색")').on('click',function(){
-		$('form').attr("method","post").attr("action","/product/listProduct").submit();
-	});
-
-
-
-	$('.pageSelector').on('change',function(){
-		$('.ct_btn01:contains("검색")').trigger('click');
-	});
-
-	
-	 $('.boardTitle').on('mouseover',function(e){
-			var divTop = $(this).position().top+20;
-			var divLeft = $(this).position().left+80;
-			var no = $(this).parent().children('.boardNo').text();
-			var href = "/product/json/getProduct"+"/"+no;
-			var menu = "${param.menu}";
-			if(menu=='search'){
-				href = href + "/search";
-			}
-			else if(menu=='manage'){
-				href = href + "/manage";
-			}
-				
-				$.ajax({
-					url:href,
-					method:"GET",
-					data:"json",
-					headers : {
-						"Accept" : "application/json",
-						"Content-Type" : "application/json"
-					},
-					success:function(JsonData,status){
-						  	var displayValue = "<div id='displayValue'>"+
-						 						" <img src='/images/uploadFiles/"+JsonData.product.fileName+"' style='width:200px;height:200px;'/>"+
-						 						"</div>";
-						 $('#displayValue').remove();
-						  $('#divLangSelect').html(displayValue); 
-					}
-				});
-				
-			if(!clickFlag){
-				timer = setTimeout(function(){
-					
-					$('#divLangSelect').css({
-						"top":divTop,
-						"left":divLeft,
-						"position":"absolute"
-					}).show();
-				},1200);
-			}
-		}).on('mouseleave',function(){
-			$('#divLangSelect').css('display','none');	
-			clearTimeout(timer);
-		});
-		
-		
-
-	
-	$(function(){
-			setInterval(function(){
-				$('#divLangSelect').css('display','none');	
-			},3500);
-	});
-
-	$('#searchKeyword').on('change',function(){
-		$.ajax({
-			url:
-		});
-	});
-
-
-</script>
 
 </html>

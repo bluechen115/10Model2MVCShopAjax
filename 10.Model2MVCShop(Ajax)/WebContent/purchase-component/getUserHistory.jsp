@@ -23,7 +23,7 @@
 	
 	
 	<style>
-		.container{width:300px;
+		.container{width:260px;
 		}
 		
 		.panel-title{text-align:center;
@@ -32,17 +32,22 @@
 		#purchaseUl{display: none;
 		}
 		#cancelUl{display:none;}
+		.force-overflow {
+							min-height: 172px;
+		}
+		.pointerLi{cursor: pointer;
+		}
+		
 	</style>
 
 
     <div class="container" id="userHistoryDiv">
-    
    	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title"><%=userId%></h3>
 		</div>
 			<ul class="list-group">
-		        <li class="list-group-item d-flex justify-content-between align-items-center">
+		        <li class="list-group-item d-flex justify-content-between align-items-center pointerLi">
 		         	 구매완료건
 		          <span class="badge badge-primary badge-pill"><%=totalCount%></span>
 		        </li>
@@ -55,7 +60,7 @@
 		        <%}%>
 		        </ul>
 		        
-		        <li class="list-group-item d-flex justify-content-between align-items-center">
+		        <li class="list-group-item d-flex justify-content-between align-items-center pointerLi">
 		        	  구매취소건
 		          <span class="badge badge-primary badge-pill"><%=cancelCount%></span>
 		        </li>
@@ -82,10 +87,9 @@
     var flag = false;
     var cancelFlag = false;
     
-    $('li:contains("구매완료건")').on('mouseover',function(){
-    	$(this).css('cursor','pointer');
-    	
-    	$(this).on('click',function(){
+  
+    
+    $('li:contains("구매완료건")').on('click',function(){
     		if(flag){
     			$('#purchaseUl').css('display','none');
     			flag = false;
@@ -95,13 +99,11 @@
 	    		flag = true;
 	    		return false;
     		}
-    	});
+
     });
     
-    $('li:contains("구매취소건")').on('mouseover',function(){
-    	$(this).css('cursor','pointer');
+    $('li:contains("구매취소건")').on('click',function(){
     	
-    	$(this).on('click',function(){
     		if(cancelFlag){
     			$('#cancelUl').css('display','none');
     			cancelFlag = false;
@@ -111,7 +113,6 @@
 	    		cancelFlag = true;
 	    		return false;
     		}
-    	});
     });
     
 	$('.panel-title').on('mouseover',function(){

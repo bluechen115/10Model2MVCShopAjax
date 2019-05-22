@@ -160,4 +160,13 @@
 				)  
 		WHERE ROWNUM = 1
 	</select>
+	
+		
+	<select id="getTitleByKeyword" parameterType="string" resultMap="productBoardSelectMap">
+		SELECT
+		TITLE
+		FROM
+		PRODUCT_BOARD
+	</select>
+	
 </mapper>

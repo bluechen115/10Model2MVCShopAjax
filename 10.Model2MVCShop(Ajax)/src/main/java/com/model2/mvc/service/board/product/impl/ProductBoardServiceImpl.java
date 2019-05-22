@@ -70,4 +70,9 @@ public class ProductBoardServiceImpl implements ProductBoardService {
 
 	}
 
+	@Override
+	public List<ProductBoard> getTitleByKeyword(String searchKeyword) throws Exception {
+		return productBoardDAO.selectTitleByKeyword(searchKeyword);
+	}
+
 }

@@ -75,7 +75,7 @@ function fncAddProduct(){
 	
 	$(function(){
 		$("td.ct_btn01:contains('√Îº“')").on('click',function(){
-			$('fomr')[0].reset();
+			$('form')[0].reset();
 		});
 	});
 

@@ -1,5 +1,7 @@
 package com.model2.mvc.web.product;
 
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,13 +142,39 @@ public class ProductRestController {
 		return null;
 	}
 	
-	@RequestMapping(value="json/getProductBoardTitle/{searchKeyword}")
-	public List<String> getProductBoardTitle(@PathVariable("searchKeyword") String searchKeyword) throws Exception{
+	@RequestMapping(value="json/getProductBoardTitle/{searchKeyword}",method=RequestMethod.GET)
+	public String[] getProductBoardTitle(@PathVariable("searchKeyword") String searchKeyword) throws Exception{
 		System.out.println("json/getProductBoardTitle");
+		System.out.println("searchKeyword :: "+URLDecoder.decode(searchKeyword, "UTF-8"));
 		
+		List<ProductBoard> boardList = productBoardService.getTitleByKeyword(searchKeyword);
+		String[] titleArray = new String[boardList.size()];
 		
+		for(int i=0;i<boardList.size();i++) {
+			titleArray[i] = boardList.get(i).getTitle();
+		}
 		
-		return null;
+
+		return titleArray;
+	}
+	
+	@RequestMapping(value="json/getProductBoardTitle/",method=RequestMethod.POST)
+	public String[] getProductBoardTitlePost(@RequestBody String searchKeyword) throws Exception{
+		System.out.println("json/getProductBoardTitlePost");
+		
+		List<ProductBoard> boardList = productBoardService.getTitleByKeyword(URLDecoder.decode(searchKeyword, "UTF-8"));
+		String[] titleArray = new String[boardList.size()];
+		
+		System.out.println("boardList size :: "+boardList.size());
+		System.out.println("boardList title :: "+boardList.get(0).getTitle());
+		
+		for(int i=0;i<boardList.size();i++) {
+			titleArray[i] = boardList.get(i).getTitle();
+			System.out.println("titleArray :: "+titleArray[i]);
+		}
+		
+
+		return titleArray;
 	}
 		
 	

@@ -10,10 +10,19 @@
 	<meta charset="EUC-KR">
 	<title>회원 목록 조회</title>
 	
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+  <link rel="stylesheet" href="/css/admin.css" type="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+	
 	<link rel="stylesheet" href="/css/admin.css" type="text/css">
 	
 	<!-- CDN(Content Delivery Network) 호스트 사용 -->
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
 	<script type="text/javascript">
 	
 		// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
@@ -87,6 +96,14 @@
 			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 		});	
 		
+		$(function(){
+			var availableTags = ["핸드크림","레스트"];
+			
+			$('#searchKeyword').autocomplete({
+			      source: availableTags
+			    });
+		});
+		
 	</script>		
 	
 </head>
@@ -122,7 +139,7 @@
 				<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>회원ID</option>
 				<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>회원명</option>
 			</select>
-			<input type="text" name="searchKeyword" 
+			<input type="text" name="searchKeyword"  id="searchKeyword"
 						value="${! empty search.searchKeyword ? search.searchKeyword : ''}"  
 						class="ct_input_g" style="width:200px; height:20px" > 
 		</td>
